@@ -1,4 +1,4 @@
-package kr.co.polycube.backendtest.exception.user.domain;
+package kr.co.polycube.backendtest.user.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

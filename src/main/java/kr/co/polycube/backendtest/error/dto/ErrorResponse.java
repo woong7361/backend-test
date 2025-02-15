@@ -1,6 +1,6 @@
-package kr.co.polycube.backendtest.exception.common;
+package kr.co.polycube.backendtest.error.dto;
 
-import kr.co.polycube.backendtest.exception.message.DefaultErrorMessage;
+import kr.co.polycube.backendtest.error.message.DefaultErrorMessage;
 import lombok.Getter;
 
 @Getter

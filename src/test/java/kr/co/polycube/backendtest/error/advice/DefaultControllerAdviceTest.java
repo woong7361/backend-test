@@ -1,4 +1,4 @@
-package kr.co.polycube.backendtest.exception.advice;
+package kr.co.polycube.backendtest.error.advice;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static kr.co.polycube.backendtest.exception.message.DefaultErrorMessage.REQUEST_URL_NOT_FOUND;
+import static kr.co.polycube.backendtest.error.message.DefaultErrorMessage.REQUEST_URL_NOT_FOUND;
 
 
 @SpringBootTest
@@ -27,6 +27,20 @@ class DefaultControllerAdviceTest {
         //when
         //then
         mockMvc.perform(MockMvcRequestBuilders.get(notExistUrl))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("reason").value(REQUEST_URL_NOT_FOUND.getMessage()));
+    }
+
+    @DisplayName("존재하지만 잘못된 HTTP METHOD 접근시")
+    @Test
+    public void notExistHttpMethod() throws Exception{
+        //given
+        String existUrl = "/users";
+
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.patch(existUrl))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers
                         .jsonPath("reason").value(REQUEST_URL_NOT_FOUND.getMessage()));

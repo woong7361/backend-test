@@ -1,8 +1,13 @@
-package kr.co.polycube.backendtest.exception.user.controller;
+package kr.co.polycube.backendtest.error.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.polycube.backendtest.exception.user.dto.UserCreateRequestDto;
+import kr.co.polycube.backendtest.error.exception.DataNotFoundException;
+import kr.co.polycube.backendtest.error.util.UserUtils;
+import kr.co.polycube.backendtest.user.domain.UserEntity;
+import kr.co.polycube.backendtest.user.dto.UserCreateRequestDto;
+import kr.co.polycube.backendtest.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,12 +29,19 @@ import java.util.Map;
 class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    UserRepository userRepository;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    @AfterEach
+    public void clearUserData() {
+        userRepository.deleteAll();
+    }
+
     @Nested
     @DisplayName("사용자 등록")
-    public class NestedClass {
+    public class RegisterUser {
         String CREATE_USER_URI = "/users";
 
         @DisplayName("정상 등록")
@@ -87,11 +99,45 @@ class UserControllerTest {
                     )
                     .andExpect(result ->
                             Assertions.assertThat(result.getResolvedException())
-                            .isInstanceOf(DataIntegrityViolationException.class))
+                                    .isInstanceOf(DataIntegrityViolationException.class))
                     .andExpect(MockMvcResultMatchers.status().isInternalServerError());
 
         }
 
 
     }
+
+
+    @Nested
+    @DisplayName("사용자 조회")
+    public class GetUser {
+        String GET_USER_URL = "/users/{id}";
+        @DisplayName("정상 조회")
+        @Test
+        public void success() throws Exception {
+            //given
+            UserEntity targetUser = UserUtils.saveRandomUserBy(userRepository);
+
+            //when
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.get(GET_USER_URL, targetUser.getId()))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(targetUser.getId()))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(targetUser.getName()));
+        }
+
+        @DisplayName("존재하지 않는 회원 조회")
+        @Test
+        public void notExistUser() throws Exception {
+            //given
+            int notExistUserId = -1;
+            //when
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.get(GET_USER_URL, notExistUserId))
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(result -> Assertions.assertThat(result.getResolvedException())
+                            .isInstanceOf(DataNotFoundException.class));
+        }
+    }
+
 }

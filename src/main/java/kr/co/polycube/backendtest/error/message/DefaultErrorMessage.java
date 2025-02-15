@@ -1,4 +1,4 @@
-package kr.co.polycube.backendtest.exception.message;
+package kr.co.polycube.backendtest.error.message;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -8,6 +8,7 @@ public enum DefaultErrorMessage {
     DEFAULT_MESSAGE("서버 에러입니다. 자세한 사항은 문의 부탁드립니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     REQUEST_URL_NOT_FOUND("요청하신 URL을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    USER_NOT_FOUND("요청하신 회원을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST)
     ;
 
 
