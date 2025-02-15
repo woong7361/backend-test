@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db
+    username: pc
+    password: 2024
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    generate-ddl: true
+
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /console
+
+logging:
+  level:
+    kr.co.polycube.backendtest: debug
