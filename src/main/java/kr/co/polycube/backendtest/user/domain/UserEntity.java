@@ -1,6 +1,7 @@
 package kr.co.polycube.backendtest.user.domain;
 
 import jakarta.persistence.*;
+import kr.co.polycube.backendtest.user.dto.UserCreateRequestDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,12 @@ public class UserEntity {
 
     public UserEntity(String name) {
         this.name = name;
+    }
+
+    /**
+     * PUT 방식으로 user를 update한다.
+     */
+    public void putUpdate(UserCreateRequestDto updateRequest) {
+        this.name = updateRequest.getName();
     }
 }

@@ -32,4 +32,16 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * 사용자 수정 엔드포인트
+     */
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDetailResponseDto> updateUser(
+            @RequestBody UserCreateRequestDto updateRequest,
+            @PathVariable Long id) {
+        UserDetailResponseDto response = userService.updateUser(updateRequest, id);
+
+        return ResponseEntity.ok(response);
+    }
 }

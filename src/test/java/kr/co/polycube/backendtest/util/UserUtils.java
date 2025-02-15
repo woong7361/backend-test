@@ -1,4 +1,4 @@
-package kr.co.polycube.backendtest.error.util;
+package kr.co.polycube.backendtest.util;
 
 import kr.co.polycube.backendtest.user.domain.UserEntity;
 import kr.co.polycube.backendtest.user.repository.UserRepository;

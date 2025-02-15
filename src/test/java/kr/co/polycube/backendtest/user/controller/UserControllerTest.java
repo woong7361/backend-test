@@ -1,8 +1,8 @@
-package kr.co.polycube.backendtest.error.user.controller;
+package kr.co.polycube.backendtest.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.polycube.backendtest.error.exception.DataNotFoundException;
-import kr.co.polycube.backendtest.error.util.UserUtils;
+import kr.co.polycube.backendtest.util.UserUtils;
 import kr.co.polycube.backendtest.user.domain.UserEntity;
 import kr.co.polycube.backendtest.user.dto.UserCreateRequestDto;
 import kr.co.polycube.backendtest.user.repository.UserRepository;
@@ -88,7 +88,7 @@ class UserControllerTest {
         @Test
         public void invalidInput() throws Exception {
             //given
-            Map<String, String> invalidInput = Map.of("n", "s");
+            UserCreateRequestDto invalidInput = new UserCreateRequestDto(null);
 
             //when
             //then
@@ -138,6 +138,67 @@ class UserControllerTest {
                     .andExpect(result -> Assertions.assertThat(result.getResolvedException())
                             .isInstanceOf(DataNotFoundException.class));
         }
+    }
+
+    @Nested
+    @DisplayName("사용자 수정")
+    public class UpdateUser {
+        String UPDATE_USER_URL = "/users/{id}";
+        @DisplayName("정상 수정")
+        @Test
+        public void success() throws Exception {
+            //given
+            UserEntity targetUser = UserUtils.saveRandomUserBy(userRepository);
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(UserUtils.createRandomString(10));
+
+            //when
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.put(UPDATE_USER_URL, targetUser.getId())
+                            .content(objectMapper.writeValueAsString(updateRequest))
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(targetUser.getId()))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(updateRequest.getName()));
+        }
+
+        @DisplayName("존재하지 않는 회원 조회")
+        @Test
+        public void notExistUser() throws Exception {
+            //given
+            int notExistUserId = -1;
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(UserUtils.createRandomString(10));
+
+            //when
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.put(UPDATE_USER_URL, notExistUserId)
+                            .content(objectMapper.writeValueAsString(updateRequest))
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(result -> Assertions.assertThat(result.getResolvedException())
+                            .isInstanceOf(DataNotFoundException.class));
+        }
+
+        @DisplayName("잘못된 입력값")
+        @Test
+        public void invalidInput() throws Exception {
+            //given
+            UserEntity targetUser = UserUtils.saveRandomUserBy(userRepository);
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(null);
+
+            //when
+            //then
+            mockMvc.perform(MockMvcRequestBuilders.put(UPDATE_USER_URL, targetUser.getId())
+                            .content(objectMapper.writeValueAsString(updateRequest))
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(result ->
+                            Assertions.assertThat(result.getResolvedException())
+                                    .isInstanceOf(DataIntegrityViolationException.class))
+                    .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+        }
+
     }
 
 }
