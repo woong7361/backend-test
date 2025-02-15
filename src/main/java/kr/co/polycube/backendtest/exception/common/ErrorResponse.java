@@ -11,7 +11,7 @@ public class ErrorResponse {
         this.reason = errorMessage.getMessage();
     }
 
-    public static ErrorResponse of(DefaultErrorMessage errorMessage) {
+    public static ErrorResponse from(DefaultErrorMessage errorMessage) {
         return new ErrorResponse(errorMessage);
     }
 }

@@ -23,7 +23,7 @@ public class DefaultControllerAdvice {
 
         return ResponseEntity
                 .status(exception.getErrorMessage().getHttpStatusCode())
-                .body(ErrorResponse.of(exception.getErrorMessage()));
+                .body(ErrorResponse.from(exception.getErrorMessage()));
     }
 
     /**
@@ -36,20 +36,20 @@ public class DefaultControllerAdvice {
 
         return ResponseEntity
                 .status(REQUEST_URL_NOT_FOUND.getHttpStatusCode())
-                .body(ErrorResponse.of(REQUEST_URL_NOT_FOUND));
+                .body(ErrorResponse.from(REQUEST_URL_NOT_FOUND));
     }
 
 
     /**
      *  정해둔 exception 외의 에러가 발생시 500 에러 발생
      */
-//    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> defaultExceptionAdvice(Exception exception) {
         log.info("un expected error please check server: {}", exception.getMessage());
         log.debug("{}", exception);
 
         return ResponseEntity
                 .status(DEFAULT_MESSAGE.getHttpStatusCode())
-                .body(ErrorResponse.of(DEFAULT_MESSAGE));
+                .body(ErrorResponse.from(DEFAULT_MESSAGE));
     }
 }
