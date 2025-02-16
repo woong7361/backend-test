@@ -32,7 +32,7 @@ class DefaultControllerAdviceTest {
                         .jsonPath("reason").value(REQUEST_URL_NOT_FOUND.getMessage()));
     }
 
-    @DisplayName("존재하지만 잘못된 HTTP METHOD 접근시")
+    @DisplayName("존재하지만 잘못된 HTTP METHOD 접근시 404 에러")
     @Test
     public void notExistHttpMethod() throws Exception{
         //given

@@ -2,6 +2,8 @@ package kr.co.polycube.backendtest.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.polycube.backendtest.error.exception.DataNotFoundException;
+import kr.co.polycube.backendtest.error.message.DefaultErrorMessage;
+import kr.co.polycube.backendtest.util.RandomUtils;
 import kr.co.polycube.backendtest.util.UserUtils;
 import kr.co.polycube.backendtest.user.domain.UserEntity;
 import kr.co.polycube.backendtest.user.dto.UserCreateRequestDto;
@@ -84,7 +86,7 @@ class UserControllerTest {
         /**
          * DataIntegrityViolationException 발생 필요하다면 advice에 적용
          */
-        @DisplayName("잘못된 입력")
+        @DisplayName("잘못된 json 입력")
         @Test
         public void invalidInput() throws Exception {
             //given
@@ -126,15 +128,17 @@ class UserControllerTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(targetUser.getName()));
         }
 
-        @DisplayName("존재하지 않는 회원 조회")
+        @DisplayName("존재하지 않는 회원 조회시 400 에러")
         @Test
         public void notExistUser() throws Exception {
             //given
-            int notExistUserId = -1;
+            int notExistUserId = 100;
             //when
             //then
             mockMvc.perform(MockMvcRequestBuilders.get(GET_USER_URL, notExistUserId))
                     .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(MockMvcResultMatchers.jsonPath("reason")
+                            .value(DefaultErrorMessage.USER_NOT_FOUND.getMessage()))
                     .andExpect(result -> Assertions.assertThat(result.getResolvedException())
                             .isInstanceOf(DataNotFoundException.class));
         }
@@ -149,7 +153,7 @@ class UserControllerTest {
         public void success() throws Exception {
             //given
             UserEntity targetUser = UserUtils.saveRandomUserBy(userRepository);
-            UserCreateRequestDto updateRequest = new UserCreateRequestDto(UserUtils.createRandomString(10));
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(RandomUtils.createRandomString(10));
 
             //when
             //then
@@ -162,12 +166,12 @@ class UserControllerTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(updateRequest.getName()));
         }
 
-        @DisplayName("존재하지 않는 회원 조회")
+        @DisplayName("존재하지 않는 회원 조회시 400 에러")
         @Test
         public void notExistUser() throws Exception {
             //given
-            int notExistUserId = -1;
-            UserCreateRequestDto updateRequest = new UserCreateRequestDto(UserUtils.createRandomString(10));
+            int notExistUserId = 100;
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(RandomUtils.createRandomString(10));
 
             //when
             //then
@@ -176,6 +180,8 @@ class UserControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(MockMvcResultMatchers.jsonPath("reason")
+                            .value(DefaultErrorMessage.USER_NOT_FOUND.getMessage()))
                     .andExpect(result -> Assertions.assertThat(result.getResolvedException())
                             .isInstanceOf(DataNotFoundException.class));
         }
