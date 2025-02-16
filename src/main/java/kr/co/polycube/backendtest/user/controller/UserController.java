@@ -1,5 +1,6 @@
 package kr.co.polycube.backendtest.user.controller;
 
+import kr.co.polycube.backendtest.aop.UserAgentLog;
 import kr.co.polycube.backendtest.user.dto.UserCreateRequestDto;
 import kr.co.polycube.backendtest.user.dto.UserCreateResponseDto;
 import kr.co.polycube.backendtest.user.dto.UserDetailResponseDto;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@UserAgentLog
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
