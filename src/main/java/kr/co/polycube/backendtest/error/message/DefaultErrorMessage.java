@@ -12,6 +12,9 @@ public enum DefaultErrorMessage {
 
     USER_NOT_FOUND("요청하신 회원을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
 
+
+    LOTTO_ISSUE_ERROR("로또 발급이 잘못되었습니다.", HttpStatus.BAD_REQUEST),
+
     ;
 
 

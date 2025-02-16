@@ -1,8 +1,8 @@
-package kr.co.polycube.backendtest.util;
+package kr.co.polycube.backendtest.testutil;
 
 import java.util.Random;
 
-public class RandomUtils {
+public class TestRandomUtils {
 
     public static String createRandomString(int length) {
         int leftLimit = 97; // letter 'a'

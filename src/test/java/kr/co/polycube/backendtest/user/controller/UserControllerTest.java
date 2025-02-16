@@ -3,8 +3,8 @@ package kr.co.polycube.backendtest.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.polycube.backendtest.error.exception.DataNotFoundException;
 import kr.co.polycube.backendtest.error.message.DefaultErrorMessage;
-import kr.co.polycube.backendtest.util.RandomUtils;
-import kr.co.polycube.backendtest.util.UserUtils;
+import kr.co.polycube.backendtest.testutil.TestRandomUtils;
+import kr.co.polycube.backendtest.testutil.UserUtils;
 import kr.co.polycube.backendtest.user.domain.UserEntity;
 import kr.co.polycube.backendtest.user.dto.UserCreateRequestDto;
 import kr.co.polycube.backendtest.user.repository.UserRepository;
@@ -22,8 +22,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.Map;
 
 
 @SpringBootTest
@@ -153,7 +151,7 @@ class UserControllerTest {
         public void success() throws Exception {
             //given
             UserEntity targetUser = UserUtils.saveRandomUserBy(userRepository);
-            UserCreateRequestDto updateRequest = new UserCreateRequestDto(RandomUtils.createRandomString(10));
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(TestRandomUtils.createRandomString(10));
 
             //when
             //then
@@ -171,7 +169,7 @@ class UserControllerTest {
         public void notExistUser() throws Exception {
             //given
             int notExistUserId = 100;
-            UserCreateRequestDto updateRequest = new UserCreateRequestDto(RandomUtils.createRandomString(10));
+            UserCreateRequestDto updateRequest = new UserCreateRequestDto(TestRandomUtils.createRandomString(10));
 
             //when
             //then

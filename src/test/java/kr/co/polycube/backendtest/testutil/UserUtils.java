@@ -1,11 +1,9 @@
-package kr.co.polycube.backendtest.util;
+package kr.co.polycube.backendtest.testutil;
 
 import kr.co.polycube.backendtest.user.domain.UserEntity;
 import kr.co.polycube.backendtest.user.repository.UserRepository;
 
-import java.util.Random;
-
-import static kr.co.polycube.backendtest.util.RandomUtils.createRandomString;
+import static kr.co.polycube.backendtest.testutil.TestRandomUtils.createRandomString;
 
 public class UserUtils {
 

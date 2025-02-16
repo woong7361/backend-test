@@ -21,3 +21,9 @@ spring:
 logging:
   level:
     kr.co.polycube.backendtest: debug
+
+
+lotto:
+  size: 6
+  start-value: 1
+  end-value: 99

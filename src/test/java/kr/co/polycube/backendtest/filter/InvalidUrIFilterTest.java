@@ -1,11 +1,8 @@
 package kr.co.polycube.backendtest.filter;
 
-import kr.co.polycube.backendtest.error.exception.CustomException;
 import kr.co.polycube.backendtest.error.message.DefaultErrorMessage;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static kr.co.polycube.backendtest.util.RandomUtils.createRandomString;
 
 @SpringBootTest
 @AutoConfigureMockMvc

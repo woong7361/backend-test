@@ -13,7 +13,7 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Slf4j
 public class InvalidUrIFilter implements Filter {
-    private static final String INVALID_URL_REGEX = "[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ?&=:/]";
+    private static final String INVALID_URL_REGEX = "[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ?&=:/.]";
     private static final Pattern INVALID_URL_PATTERN = Pattern.compile(INVALID_URL_REGEX);
 
     /**
