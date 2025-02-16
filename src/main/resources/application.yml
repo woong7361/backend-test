@@ -18,6 +18,12 @@ spring:
         web-allow-others: true
       path: /console
 
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+      schema-locations: classpath:sql/schema-h2.sql # 서버 시작시 ddl sql문을 실행할 위치 및 파일 지정
+
 logging:
   level:
     kr.co.polycube.backendtest: debug
@@ -27,3 +33,7 @@ lotto:
   size: 6
   start-value: 1
   end-value: 99
+
+  schedule:
+    draw-lotto: "draw-lotto-job"
+    cron: "0 0 0 * * SUN"

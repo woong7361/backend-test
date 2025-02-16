@@ -24,4 +24,12 @@ public class LottoConfigValue {
      */
     @Value("${lotto.end-value}")
     private int lottoEndValue;
+
+
+    /**
+     * 가장 큰 로또의 수
+     */
+    @Value("${lotto.schedule.draw-lotto}")
+    private String drawLottoJob;
+
 }

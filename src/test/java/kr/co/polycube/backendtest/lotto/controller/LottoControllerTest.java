@@ -1,7 +1,9 @@
 package kr.co.polycube.backendtest.lotto.controller;
 
 import kr.co.polycube.backendtest.lotto.config.LottoConfigValue;
+import kr.co.polycube.backendtest.lotto.repository.LottoRepository;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,14 @@ class LottoControllerTest {
 
     @Autowired
     LottoConfigValue lottoConfigValue;
+
+    @Autowired
+    LottoRepository lottoRepository;
+
+    @AfterEach
+    public void clearLottoData() {
+        lottoRepository.deleteAll();
+    }
 
     @Nested
     @DisplayName("로또 발급")

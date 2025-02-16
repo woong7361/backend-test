@@ -29,7 +29,7 @@ public class LottoService {
                 lottoConfigValue.getLottoEndValue()
         );
 
-        LottoEntity lottoEntity = new LottoEntity(lottoNumbers, lottoConfigValue.getLottoSize());
+        LottoEntity lottoEntity = new LottoEntity(lottoNumbers);
         lottoRepository.save(lottoEntity);
 
         return LottoNumberResponseDto.of(lottoNumbers);

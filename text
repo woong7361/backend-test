@@ -1,0 +1,5 @@
+random vs secure random vs thread local random
+
+Cursor 기반 vs Paging 기반 ItemReader 정하기
+
+단순 생성자나 기본 메서드를 제외한 메서드에 javadocs 작성
