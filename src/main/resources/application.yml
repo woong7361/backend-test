@@ -35,5 +35,13 @@ lotto:
   end-value: 99
 
   schedule:
-    draw-lotto: "draw-lotto-job"
-    cron: "0 0 0 * * SUN"
+    draw-lotto:
+      name: "draw-lotto-job"
+      cron: "0 0 0 * * SUN"
+      chunk-size: 10
+      page-size: 10
+
+
+filter:
+  invalid-url:
+    regex: "[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ?&=:/]"

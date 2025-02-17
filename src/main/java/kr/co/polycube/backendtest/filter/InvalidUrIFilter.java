@@ -13,8 +13,11 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 
 @Slf4j
 public class InvalidUrIFilter implements Filter {
-    private static final String INVALID_URL_REGEX = "[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ?&=:/.]";
-    private static final Pattern INVALID_URL_PATTERN = Pattern.compile(INVALID_URL_REGEX);
+    private final Pattern invalidUrlPattern;
+
+    public InvalidUrIFilter(String invalidUrlRegex) {
+        this.invalidUrlPattern = Pattern.compile(invalidUrlRegex);
+    }
 
     /**
      *  요청 URI에 [?, &, =, :, //]를 제외한 특수문제가 존재할때 접속을 차단시키는 filter
@@ -30,7 +33,7 @@ public class InvalidUrIFilter implements Filter {
     }
 
     private void checkUri(String url) {
-        if (INVALID_URL_PATTERN.matcher(url).find()) {
+        if (invalidUrlPattern.matcher(url).find()) {
             log.debug("invalid URL: {}", url);
 
             throw new CustomException(DefaultErrorMessage.INVALID_URL);

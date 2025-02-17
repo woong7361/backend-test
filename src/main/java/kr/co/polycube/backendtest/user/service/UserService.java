@@ -51,6 +51,7 @@ public class UserService {
                 .orElseThrow(() -> new DataNotFoundException(USER_NOT_FOUND, id));
 
         findUser.putUpdate(updateRequest);
+        log.debug("user update success, user id: {}, request param: {}", id, updateRequest.getName());
 
         return UserDetailResponseDto.from(findUser);
     }

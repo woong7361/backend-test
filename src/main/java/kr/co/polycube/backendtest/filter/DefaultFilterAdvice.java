@@ -33,15 +33,11 @@ public class DefaultFilterAdvice extends OncePerRequestFilter {
     private void setErrorResponse(
             HttpServletResponse response,
             DefaultErrorMessage errorMessage
-    ){
+    ) throws IOException {
         response.setStatus(errorMessage.getHttpStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        try{
-            response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(errorMessage)));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(errorMessage)));
     }
 }

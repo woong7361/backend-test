@@ -14,7 +14,7 @@ public class LottoController {
     private final LottoService lottoService;
 
     /**
-     * 로또 발급
+     * 로또 발급 엔드포인트
      * 랜덤한 6개의 로또 숫자를 반환한다.
      */
     @PostMapping("/lottos")

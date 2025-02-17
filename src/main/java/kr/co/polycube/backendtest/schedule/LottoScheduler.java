@@ -25,12 +25,17 @@ public class LottoScheduler {
     /**
      * 매주 일요일마다 로또 번호 추첨후 등수 저장
      */
-    @Scheduled(cron = "${lotto.schedule.cron}")
+    @Scheduled(cron = "${lotto.schedule.draw-lotto.cron}")
     public void drawLotto() throws Exception {
+        String winningLottoNumbers = getJoinedLottoNumbersString();
+        String dateTime = LocalDateTime.now().toString();
+
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("attr", getJoinedLottoNumbersString())
-                .addString("dateTime", LocalDateTime.now().toString())
+                .addString("attr", winningLottoNumbers)
+                .addString("dateTime", dateTime)
                 .toJobParameters();
+
+        log.info("winning lotto number is : {} , time: {}", winningLottoNumbers, dateTime);
 
         jobLauncher.run(jobRegistry.getJob(lottoConfigValue.getDrawLottoJob()), jobParameters);
 

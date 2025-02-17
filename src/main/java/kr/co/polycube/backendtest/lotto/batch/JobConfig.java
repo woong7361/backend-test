@@ -5,7 +5,6 @@ import kr.co.polycube.backendtest.lotto.domain.LottoEntity;
 import kr.co.polycube.backendtest.lotto.domain.WinnerEntity;
 import kr.co.polycube.backendtest.lotto.repository.LottoRepository;
 import kr.co.polycube.backendtest.lotto.repository.WinnerRepository;
-import kr.co.polycube.backendtest.util.RandomUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -44,7 +43,7 @@ public class JobConfig {
     private final LottoConfigValue lottoConfigValue;
 
     @Bean
-    public Job firstJob() {
+    public Job drawLottoJob() {
         return new JobBuilder(lottoConfigValue.getDrawLottoJob(), jobRepository)
                 .start(firstStep())
                 .build();
@@ -54,7 +53,7 @@ public class JobConfig {
     @JobScope
     public Step firstStep() {
         return new StepBuilder("firstStep", jobRepository)
-                .<LottoEntity, WinnerEntity>chunk(10, platformTransactionManager)
+                .<LottoEntity, WinnerEntity>chunk(lottoConfigValue.getChunkSize(), platformTransactionManager)
                 .reader(lottoReader())
                 .processor(middleProcessor(null))
                 .writer(winnerWriter())
@@ -67,7 +66,7 @@ public class JobConfig {
         log.debug("read issued lotto data");
         return new RepositoryItemReaderBuilder<LottoEntity>()
                 .name("lottoReader")
-                .pageSize(10)
+                .pageSize(lottoConfigValue.getPageSize())
                 .methodName("findAll")
                 .repository(lottoRepository)
                 .sorts(Map.of("id", Sort.Direction.ASC))
@@ -82,7 +81,6 @@ public class JobConfig {
                 .map(Integer::parseInt)
                 .toList();
 
-        log.info("winning lotto number is : {}", winningLottoNumbers.toString());
         return new ItemProcessor<LottoEntity, WinnerEntity>() {
             @Override
             public WinnerEntity process(LottoEntity item) throws Exception {
@@ -99,7 +97,6 @@ public class JobConfig {
     @Bean
     @StepScope
     public RepositoryItemWriter<WinnerEntity> winnerWriter() {
-
         log.debug("write lotto winner data");
         return new RepositoryItemWriterBuilder<WinnerEntity>()
                 .repository(winnerRepository)

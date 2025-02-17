@@ -18,7 +18,7 @@ import java.util.List;
 
 @SpringBootTest(
         properties = {
-                "lotto.schedule.cron=0/30 * * * * ?",
+                "lotto.schedule.draw-lotto.cron=0/30 * * * * ?",
                 "lotto.start-value=1",
                 "lotto.end-value=6"
         }

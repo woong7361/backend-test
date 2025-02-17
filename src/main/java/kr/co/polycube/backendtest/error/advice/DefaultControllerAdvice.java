@@ -1,7 +1,7 @@
 package kr.co.polycube.backendtest.error.advice;
 
-import kr.co.polycube.backendtest.error.exception.CustomException;
 import kr.co.polycube.backendtest.error.dto.ErrorResponse;
+import kr.co.polycube.backendtest.error.exception.CustomException;
 import kr.co.polycube.backendtest.error.exception.DataNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,12 @@ import static kr.co.polycube.backendtest.error.message.DefaultErrorMessage.*;
 @Slf4j
 public class DefaultControllerAdvice {
 
+
     /**
      *  클라이언트가 요청한 데이터가 존재하지 않을때 400 에러 발생
      */
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<ErrorResponse> customExceptionAdvice(DataNotFoundException exception) {
+    public ResponseEntity<ErrorResponse> dataNotFoundException(DataNotFoundException exception) {
         log.debug("error message : {}, parameter {}", exception.getMessage(), exception.getRequestParam());
 
         return ResponseEntity
@@ -45,7 +46,7 @@ public class DefaultControllerAdvice {
      * 존재하지만 다른 HTTP method로 접근이 들어왔을때 404 에러 발생
      */
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
-    public ResponseEntity<ErrorResponse> noResourceFoundExceptionAdvice(HttpRequestMethodNotSupportedException exception) {
+    public ResponseEntity<ErrorResponse> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
         log.debug("invalid request message: {}, uri: {}, method: {}",
                 exception.getMessage(), exception.getHeaders().getLocation(), exception.getMethod());
 
@@ -54,6 +55,17 @@ public class DefaultControllerAdvice {
                 .body(ErrorResponse.from(REQUEST_URL_NOT_FOUND));
     }
 
+    /**
+     *  정해진 에러 발생
+     */
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> customException (CustomException exception) {
+        log.debug("error message : {}", exception.getMessage());
+
+        return ResponseEntity
+                .status(exception.getErrorMessage().getHttpStatusCode())
+                .body(ErrorResponse.from(exception.getErrorMessage()));
+    }
 
     /**
      *  정해둔 exception 외의 에러가 발생시 500 에러 발생
